@@ -1,47 +1,45 @@
 import allure
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+from elementium.drivers.se import SeElements
 
+from page_objects.abstract_page import AbstractPage
 from page_objects.user_workspace_page import UserWorkSpacePage
-from selenium.webdriver.remote.webdriver import WebDriver
 
 
-class GitHubLoginPage(object):
+class GitHubLoginPage(AbstractPage):
     """
         Test Adaptation Layer
     """
-    def __init__(self, web_driver: WebDriver):
+    def __init__(self, se_elements: SeElements):
         # Initialize web driver
-        self.web_driver = web_driver
-        self.username_field = self.web_driver.find_element_by_id("login_field")
-        self.password_field = self.web_driver.find_element_by_id("password")
-        self.login_button = self.web_driver.find_element_by_name("commit")
+        super().__init__(se_elements)
+        self.username_field = self.se_elements.find("#login_field")
+        self.password_field = self.se_elements.find("#password")
+        self.login_button = self.se_elements.find("[name=commit]")
 
     @allure.step("Enter username {1}")
     def enter_login(self, username):
-        self.username_field.send_keys(username)
-        allure.attach(self.web_driver.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
+        self.username_field.write(username)
+        allure.attach(self.se_elements.browser.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
         return self
 
     @allure.step("Filling in the password")
     def enter_password(self, password):
-        self.password_field.send_keys(password)
-        allure.attach(self.web_driver.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
+        self.password_field.write(password)
+        allure.attach(self.se_elements.browser.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
         return self
 
     @allure.step("Clicking on the Login Button")
     def click_on_login_button(self):
         self.login_button.click()
-        allure.attach(self.web_driver.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
+        allure.attach(self.se_elements.browser.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
         return self
 
     @allure.step("Accepting signup")
     def accept_signup(self):
         try:
-            click_button = WebDriverWait(self.web_driver, 15).until(expected_conditions.presence_of_element_located((By.ID, 'js-oauth-authorize-btn')))\
-                if "deviceName" in self.web_driver.desired_capabilities.keys()\
-            else WebDriverWait(self.web_driver, 15).until(expected_conditions.presence_of_element_located((By.NAME, 'commit')))
-            self.web_driver.execute_script("arguments[0].click()", click_button)
+            click_button = self.se_elements.find('#js-oauth-authorize-btn').until(lambda btn: btn.is_enabled(ttl=10))\
+                if "deviceName" in self.se_elements.browser.desired_capabilities.keys()\
+            else self.se_elements.find('[name=commit]').until(lambda btn: btn.is_enabled(ttl=10))
+            self.se_elements.browser.execute_script("arguments[0].click()", click_button)
         finally:
-            return UserWorkSpacePage(self.web_driver)
+            return UserWorkSpacePage(self.se_elements)

@@ -1,27 +1,28 @@
 import allure
-from selenium.webdriver.remote.webdriver import WebDriver
+from elementium.drivers.se import SeElements
 
+from page_objects.abstract_page import AbstractPage
 from page_objects.github_login_page import GitHubLoginPage
 
 
-class SignUpPage(object):
+class SignUpPage(AbstractPage):
     """
         Test Adaptation Layer
     """
-    def __init__(self, web_driver: WebDriver):
+    def __init__(self, se_elements: SeElements):
         # Initialize web driver
-        self.web_driver = web_driver
-        self.stackoverflow_logo = self.web_driver.find_element_by_css_selector(".-img._glyph")
-        self.google_login_button = self.web_driver.find_element_by_css_selector('[data-provider=google]')
-        self.facebook_login_button = self.web_driver.find_element_by_css_selector('[data-provider=facebook]')
-        self.github_login_button = self.web_driver.find_element_by_css_selector('[data-provider=github]')
-        self.display_name = self.web_driver.find_element_by_id("display-name")
-        self.product_updates = self.web_driver.find_element_by_id("opt-in")
-        self.username_field = self.web_driver.find_element_by_id("email")
-        self.password_field = self.web_driver.find_element_by_id("password")
-        self.signup_button = self.web_driver.find_element_by_id("submit-button")
+        super().__init__(se_elements)
+        self.stackoverflow_logo = self.se_elements.find(".-img._glyph")
+        self.google_login_button = self.se_elements.find('[data-provider=google]')
+        self.facebook_login_button = self.se_elements.find('[data-provider=facebook]')
+        self.github_login_button = self.se_elements.find('[data-provider=github]')
+        self.display_name = self.se_elements.find("#display-name")
+        self.product_updates = self.se_elements.find("#opt-in")
+        self.username_field = self.se_elements.find("#email")
+        self.password_field = self.se_elements.find("#password")
+        self.signup_button = self.se_elements.find("#submit-button")
 
     @allure.step("Signing up from GitHub")
     def click_github_signup(self):
         self.github_login_button.click()
-        return GitHubLoginPage(self.web_driver)
+        return GitHubLoginPage(self.se_elements)

@@ -1,38 +1,38 @@
-from selenium.webdriver.remote.webdriver import WebDriver
 import allure
+from elementium.drivers.se import SeElements
 
+from page_objects.abstract_page import AbstractPage
 from page_objects.user_workspace_page import UserWorkSpacePage
 
 
-class LoginPage(object):
+class LoginPage(AbstractPage):
     """
         Test Adaptation Layer
     """
-    def __init__(self, web_driver: WebDriver):
-        # Initialize web driver
-        self.web_driver = web_driver
+    def __init__(self, se_elements: SeElements):
 
-        self.stackoverflow_logo = self.web_driver.find_element_by_css_selector(".-img._glyph")
-        self.google_login_button = self.web_driver.find_element_by_css_selector('[data-provider=google]')
-        self.facebook_login_button = self.web_driver.find_element_by_css_selector('[data-provider=facebook]')
-        self.username_field = self.web_driver.find_element_by_id("email")
-        self.password_field = self.web_driver.find_element_by_id("password")
-        self.login_button = self.web_driver.find_element_by_id("submit-button")
+        super().__init__(se_elements)
+        self.stackoverflow_logo = self.se_elements.find(".-img._glyph")
+        self.google_login_button = self.se_elements.find('[data-provider=google]')
+        self.facebook_login_button = self.se_elements.find('[data-provider=facebook]')
+        self.username_field = self.se_elements.find("#email")
+        self.password_field = self.se_elements.find("#password")
+        self.login_button = self.se_elements.find("#submit-button")
 
     @allure.step("Enter username {1}")
     def enter_login(self, username):
-        self.username_field.send_keys(username)
-        allure.attach(self.web_driver.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
+        self.username_field.write(username)
+        allure.attach(self.se_elements.browser.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
         return self
 
     @allure.step("Filling in the password")
     def enter_password(self, password):
-        self.password_field.send_keys(password)
-        allure.attach(self.web_driver.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
+        self.password_field.write(password)
+        allure.attach(self.se_elements.browser.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
         return self
 
     @allure.step("Clicking on the Login Button")
     def click_on_login_button(self):
-        self.web_driver.execute_script("arguments[0].click()", self.login_button)
-        allure.attach(self.web_driver.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
-        return UserWorkSpacePage(self.web_driver)
+        self.se_elements.browser.execute_script("arguments[0].click()", self.login_button)
+        allure.attach(self.se_elements.browser.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
+        return UserWorkSpacePage(self.se_elements)

@@ -4,6 +4,7 @@ from functools import wraps
 import pytest
 import selenium
 import yaml
+from elementium.drivers.se import SeElements
 from selenium.webdriver import DesiredCapabilities
 
 from browsers.browsers import Browsers
@@ -52,7 +53,7 @@ def get_browser():
 def get_main_page(browser):
     print(f"Browser: {Config.webdrivers[browser].name}")
     webdriver = Config.webdrivers[browser](command_executor=Config.grid_address) if "Remote" in Config.webdrivers[browser].name or "Android" in Config.webdrivers[browser].name or "IOS" in Config.webdrivers[browser].name else Config.webdrivers[browser]()
-    return MainPage(webdriver.web_driver)
+    return MainPage(SeElements(webdriver.web_driver))
 
 
 @pytest.fixture
@@ -70,7 +71,7 @@ def main_page(request):
     res = get_main_page(next_brw)
 
     def fin():
-        res.web_driver.quit()
+        res.se_elements.browser.quit()
 
     request.addfinalizer(fin)
 

@@ -1,41 +1,34 @@
 import allure
-from selenium.webdriver import ActionChains
-from selenium.webdriver.common.by import By
+from elementium.drivers.se import SeElements
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+
+from page_objects.abstract_page import AbstractPage
 
 
-class UserWorkSpacePage(object):
+class UserWorkSpacePage(AbstractPage):
     """
         Test Adaptation Layer
     """
-    def __init__(self, web_driver: WebDriver):
-        # Initialize web driver
-        self.web_driver = web_driver
+    def __init__(self, se_elements: SeElements):
 
-        self.profile_button = WebDriverWait(self.web_driver, 25)\
-            .until(
-            expected_conditions.visibility_of_element_located((By.CLASS_NAME, "my-profile"))
-        )
-        self.stackoverflow_logo = self.web_driver.find_element_by_css_selector(".-img._glyph")
-        self.inbox_button = self.web_driver.find_element_by_class_name("js-inbox-button")
-        self.achivements_button = self.web_driver.find_element_by_class_name("js-achievements-button")
-        self.help_button = self.web_driver.find_element_by_class_name("js-help-button")
-        self.user_menu = self.web_driver.find_element_by_class_name("js-site-switcher-button")
-        self.search_field = self.web_driver.find_element_by_name("q")
+        super().__init__(se_elements)
+        self.profile_button = self.se_elements.find("[name=my-profile]", ttl=25)
+        self.stackoverflow_logo = self.se_elements.find(".-img._glyph")
+        self.inbox_button = self.se_elements.find("[name=js-inbox-button]")
+        self.achivements_button = self.se_elements.find("[name=js-achievements-button]")
+        self.help_button = self.se_elements.find(".js-help-button")
+        self.user_menu = self.se_elements.find("[name=js-site-switcher-button]")
+        self.search_field = self.se_elements.find("[name=q]")
 
     @property
     def search_results(self):
-        if "deviceName" in self.web_driver.desired_capabilities.keys():
-            self.web_driver.find_elements_by_css_selector("[aria-controls=search]").click()
-        return self.web_driver.find_elements_by_css_selector(".search-result")\
-            if "deviceName" in self.web_driver.desired_capabilities.keys()\
-            else self.web_driver.find_elements_by_name('q')
+        if "deviceName" in self.se_elements.browser.desired_capabilities.keys():
+            self.se_elements.find("[aria-controls=search]").click()
+        return self.se_elements.find(".search-result")\
+            if "deviceName" in self.se_elements.browser.desired_capabilities.keys()\
+            else self.se_elements.find('[name=q]')
 
     @allure.step("Searching for the next pattern: {1}")
     def search(self, request):
-        self.search_field.send_keys(request)
-        ActionChains(self.web_driver).send_keys(Keys.ENTER).perform()
+        self.search_field.write(request).write(Keys.ENTER)
         return self
