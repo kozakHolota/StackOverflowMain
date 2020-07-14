@@ -1,0 +1,8 @@
+login: stackoverflow_login
+password: stackoverflow_password
+github_login: github_login
+github_password: github_password
+grid_url: http://localhost:4444/wd/hub
+browsers:
+  - Firefox
+  - Chrome
