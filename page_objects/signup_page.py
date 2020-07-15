@@ -12,15 +12,15 @@ class SignUpPage(AbstractPage):
     def __init__(self, se_elements: SeElements):
         # Initialize web driver
         super().__init__(se_elements)
-        self.stackoverflow_logo = self.se_elements.find(".-img._glyph")
-        self.google_login_button = self.se_elements.find('[data-provider=google]')
-        self.facebook_login_button = self.se_elements.find('[data-provider=facebook]')
-        self.github_login_button = self.se_elements.find('[data-provider=github]')
-        self.display_name = self.se_elements.find("#display-name")
-        self.product_updates = self.se_elements.find("#opt-in")
-        self.username_field = self.se_elements.find("#email")
-        self.password_field = self.se_elements.find("#password")
-        self.signup_button = self.se_elements.find("#submit-button")
+        self.stackoverflow_logo = self.se_elements.find(".-img._glyph").until(lambda s: s.is_displayed(), ttl=25)
+        self.google_login_button = self.se_elements.find('[data-provider=google]').until(lambda s: s.is_displayed(), ttl=25)
+        self.facebook_login_button = self.se_elements.find('[data-provider=facebook]').until(lambda s: s.is_displayed(), ttl=25)
+        self.github_login_button = self.se_elements.find('[data-provider=github]').until(lambda s: s.is_displayed(), ttl=25)
+        self.display_name = self.se_elements.find("#display-name").until(lambda s: s.is_displayed(), ttl=25)
+        self.product_updates = self.se_elements.find("#opt-in").until(lambda s: s.is_displayed(), ttl=25)
+        self.username_field = self.se_elements.find("#email").until(lambda s: s.is_displayed(), ttl=25)
+        self.password_field = self.se_elements.find("#password").until(lambda s: s.is_displayed(), ttl=25)
+        self.signup_button = self.se_elements.find("#submit-button").until(lambda s: s.is_displayed(), ttl=25)
 
     @allure.step("Signing up from GitHub")
     def click_github_signup(self):

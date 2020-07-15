@@ -12,9 +12,9 @@ class GitHubLoginPage(AbstractPage):
     def __init__(self, se_elements: SeElements):
         # Initialize web driver
         super().__init__(se_elements)
-        self.username_field = self.se_elements.find("#login_field")
-        self.password_field = self.se_elements.find("#password")
-        self.login_button = self.se_elements.find("[name=commit]")
+        self.username_field = self.se_elements.find("#login_field").until(lambda s: s.is_displayed(), ttl=25)
+        self.password_field = self.se_elements.find("#password").until(lambda s: s.is_displayed(), ttl=25)
+        self.login_button = self.se_elements.find("[name=commit]").until(lambda s: s.is_displayed(), ttl=25)
 
     @allure.step("Enter username {1}")
     def enter_login(self, username):
@@ -40,6 +40,6 @@ class GitHubLoginPage(AbstractPage):
             click_button = self.se_elements.find('#js-oauth-authorize-btn').until(lambda btn: btn.is_enabled(ttl=10))\
                 if "deviceName" in self.se_elements.browser.desired_capabilities.keys()\
             else self.se_elements.find('[name=commit]').until(lambda btn: btn.is_enabled(ttl=10))
-            self.se_elements.browser.execute_script("arguments[0].click()", click_button)
+            click_button.click()
         finally:
             return UserWorkSpacePage(self.se_elements)
