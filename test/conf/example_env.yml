@@ -4,5 +4,16 @@ github_login: github_login
 github_password: github_password
 grid_url: http://localhost:4444/wd/hub
 browsers:
+  # Browsers on which tests can be executed. You don't have to list them all.
   - Firefox
   - Chrome
+  - FirefoxRemote
+  - ChromeRemote
+  - Edge
+  - EdgeRemote
+  - Ie
+  - IeRemote
+  - Safari
+  - SafariRemote
+  - AndroidChrome
+  - IOSSafari
