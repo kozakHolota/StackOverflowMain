@@ -1,10 +1,12 @@
 import allure
 import pytest
 
+
 class TestPages(object):
     """
     Test Definition Layer
     """
+
     @allure.title("Verify that StackOverflow main page shows correctly")
     @pytest.mark.regression
     @pytest.mark.test_main_page
@@ -26,8 +28,8 @@ class TestPages(object):
         assert login_page.password_field.is_displayed(), "Password field is not shown"
         assert login_page.login_button.is_displayed(), "Login submit button is not shown"
 
-        workspace_page = login_page.enter_login(username)\
-            .enter_password(password)\
+        workspace_page = login_page.enter_login(username) \
+            .enter_password(password) \
             .click_on_login_button()
         assert workspace_page.stackoverflow_logo.is_displayed(), "StackOverflow Logo is not shown"
         assert workspace_page.profile_button.is_displayed(), "Profile button is not displayed"
@@ -58,7 +60,8 @@ class TestPages(object):
         assert github_login_page.password_field.is_displayed(), "Password field is not shown"
         assert github_login_page.login_button.is_displayed(), "Login submit button is not shown"
 
-        workspace_page = github_login_page.enter_login(github_username).enter_password(github_password).click_on_login_button().accept_signup()
+        workspace_page = github_login_page.enter_login(github_username).enter_password(
+            github_password).click_on_login_button().accept_signup()
 
         assert workspace_page.stackoverflow_logo.is_displayed(), "StackOverflow Logo is not shown"
         assert workspace_page.profile_button.is_displayed(), "Profile button is not displayed"
@@ -72,12 +75,12 @@ class TestPages(object):
     @pytest.mark.test_search_existing
     def test_search_existing(self, main_page, username, password, github_username, github_password):
         search_pattern = "SQL query"
-        search_results = main_page\
-            .click_on_login_link()\
-            .enter_login(username)\
-            .enter_password(password)\
-            .click_on_login_button()\
-            .search(search_pattern)\
+        search_results = main_page \
+            .click_on_login_link() \
+            .enter_login(username) \
+            .enter_password(password) \
+            .click_on_login_button() \
+            .search(search_pattern) \
             .search_results
 
         assert len(search_results), f"Search results for query '{search_pattern}' are not shown"

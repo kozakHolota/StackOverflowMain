@@ -33,7 +33,7 @@ class GitHubLoginPage(object):
     @allure.step("Clicking on the Login Button")
     def click_on_login_button(self):
         self.login_button.click()
-        allure.attach(self.web_driver.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
+        allure.attach(self.web_driver.get_screenshot_as_png(), name="Login result screenshot", attachment_type=allure.attachment_type.PNG)
         return self
 
     @allure.step("Accepting signup")

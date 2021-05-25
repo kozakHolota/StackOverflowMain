@@ -6,8 +6,8 @@ class Safari(AbstractBrowser):
         safari_cpabilities = {
             "appium-version": "1.17.1-1",
             "platformName": "iOS",
-            "platformVersion": "13.5",
-            "deviceName": "iPhone 11 Pro Max",
+            "platformVersion": "14.2",
+            "deviceName": "iPhone 12 Pro Max",
             "newCommandTimeout": 600,
             "bundleId": "com.apple.mobilesafari",
              "useLocationServices": False
