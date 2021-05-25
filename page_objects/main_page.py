@@ -1,8 +1,14 @@
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.remote.webdriver import WebDriver
 import allure
+
+from locators.common_locators import CommonLocators
+from locators.link import Link
+from locators.main_page_locators import MainPageLocators
 from page_objects.login_page import LoginPage
 from page_objects.signup_page import SignUpPage
+from web_elements.button import Button
+from web_elements.image import Image
 
 
 class MainPage(object):
@@ -19,9 +25,9 @@ class MainPage(object):
         self.web_driver.get("https://stackoverflow.com")
 
         # Instantiating web elements
-        self.stackoverflow_logo = self.web_driver.find_element_by_css_selector(".-img._glyph")
-        self.login_link = self.web_driver.find_element_by_css_selector(".login-link.s-btn[href*=login]")
-        self.sign_up_button = self.web_driver.find_element_by_css_selector(".login-link.s-btn[href*=signup]")
+        self.stackoverflow_logo = Image(self.web_driver, CommonLocators.STACKOVERFLOW_LOGO_LOCATOR.arguments)
+        self.login_link = Link(self.web_driver, MainPageLocators.LOGIN_LINK_LOCATOR.arguments)
+        self.sign_up_button = Button(self.web_driver, MainPageLocators.SGNUP_BUTTON_LOCATOR.arguments)
 
 
     @allure.step("Click on the Sign Up button")

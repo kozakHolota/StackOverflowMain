@@ -6,6 +6,12 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+from locators.common_locators import CommonLocators
+from locators.user_workspace_locator import UserWorkspaceLocators
+from web_elements.button import Button
+from web_elements.image import Image
+from web_elements.text_field import TextField
+
 
 class UserWorkSpacePage(object):
     """
@@ -15,21 +21,19 @@ class UserWorkSpacePage(object):
         # Initialize web driver
         self.web_driver = web_driver
 
-        self.profile_button = WebDriverWait(self.web_driver, 25)\
-            .until(
-            expected_conditions.visibility_of_element_located((By.CLASS_NAME, "my-profile"))
-        )
-        self.stackoverflow_logo = self.web_driver.find_element_by_css_selector(".-img._glyph")
-        self.inbox_button = self.web_driver.find_element_by_class_name("js-inbox-button")
-        self.achivements_button = self.web_driver.find_element_by_class_name("js-achievements-button")
-        self.help_button = self.web_driver.find_element_by_class_name("js-help-button")
-        self.user_menu = self.web_driver.find_element_by_class_name("js-site-switcher-button")
-        self.search_field = self.web_driver.find_element_by_name("q")
+        self.profile_button = Button(self.web_driver, UserWorkspaceLocators.PROFILE_BUTTON_LOCATOR.arguments, expected_condition=expected_conditions.visibility_of_element_located)
+        self.stackoverflow_logo = Image(self.web_driver, CommonLocators.STACKOVERFLOW_LOGO_LOCATOR.arguments)
+        self.inbox_button = Button(self.web_driver, UserWorkspaceLocators.INBOX_BUTTON_LOCATOR.arguments)
+        self.achivements_button = Button(self.web_driver, UserWorkspaceLocators.ACHIVEMENTS_BUTTON_LOCATOR.arguments)
+        self.help_button = Button(self.web_driver, UserWorkspaceLocators.HELP_BUTTON_LOCATOR.arguments)
+        self.user_menu = Button(self.web_driver, UserWorkspaceLocators.USER_MENU_BUTTON_LOCATOR.arguments)
+        self.search_field = TextField(self.web_driver, UserWorkspaceLocators.SEARCH_FIELD_LOCATOR.arguments)
+        self.search_button_mobile = Button(self.web_driver, UserWorkspaceLocators.SEARCH_BUTTON_MOBILE_LOCATOR.arguments)
 
     @property
     def search_results(self):
         if "deviceName" in self.web_driver.desired_capabilities.keys():
-            self.web_driver.find_elements_by_css_selector("[aria-controls=search]").click()
+            self.search_button_mobile.click()
         return self.web_driver.find_elements_by_css_selector(".search-result")\
             if "deviceName" in self.web_driver.desired_capabilities.keys()\
             else self.web_driver.find_elements_by_name('q')

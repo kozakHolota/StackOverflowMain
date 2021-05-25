@@ -1,7 +1,12 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 import allure
 
+from locators.common_locators import CommonLocators
+from locators.login_page_locators import LoginPageLocators
 from page_objects.user_workspace_page import UserWorkSpacePage
+from web_elements.button import Button
+from web_elements.image import Image
+from web_elements.text_field import TextField
 
 
 class LoginPage(object):
@@ -12,12 +17,12 @@ class LoginPage(object):
         # Initialize web driver
         self.web_driver = web_driver
 
-        self.stackoverflow_logo = self.web_driver.find_element_by_css_selector(".-img._glyph")
-        self.google_login_button = self.web_driver.find_element_by_css_selector('[data-provider=google]')
-        self.facebook_login_button = self.web_driver.find_element_by_css_selector('[data-provider=facebook]')
-        self.username_field = self.web_driver.find_element_by_id("email")
-        self.password_field = self.web_driver.find_element_by_id("password")
-        self.login_button = self.web_driver.find_element_by_id("submit-button")
+        self.stackoverflow_logo = Image(self.web_driver, CommonLocators.STACKOVERFLOW_LOGO_LOCATOR.arguments)
+        self.google_login_button = Button(self.web_driver, CommonLocators.GOOGLE_LOGIN_BUTTON_LOCATOR.arguments)
+        self.facebook_login_button = Button(self.web_driver, CommonLocators.FACEBOOK_BUTTON_LOCATOR.arguments)
+        self.username_field = TextField(self.web_driver, LoginPageLocators.USERNAME_FIELD_LOCATOR.arguments)
+        self.password_field = TextField(self.web_driver, LoginPageLocators.PASSWORD_FIELD_LOCATOR.arguments)
+        self.login_button = Button(self.web_driver, LoginPageLocators.LOGIN_BUTTON_LOCATOR.arguments)
 
     @allure.step("Enter username {1}")
     def enter_login(self, username):
@@ -33,6 +38,6 @@ class LoginPage(object):
 
     @allure.step("Clicking on the Login Button")
     def click_on_login_button(self):
-        self.web_driver.execute_script("arguments[0].click()", self.login_button)
+        self.login_button.click()
         allure.attach(self.web_driver.get_screenshot_as_png(), attachment_type=allure.attachment_type.PNG)
         return UserWorkSpacePage(self.web_driver)
