@@ -10,6 +10,7 @@ from locators.common_locators import CommonLocators
 from locators.user_workspace_locator import UserWorkspaceLocators
 from web_elements.button import Button
 from web_elements.image import Image
+from web_elements.query_items import QueryItems
 from web_elements.text_field import TextField
 
 
@@ -29,14 +30,16 @@ class UserWorkSpacePage(object):
         self.user_menu = Button(self.web_driver, UserWorkspaceLocators.USER_MENU_BUTTON_LOCATOR.arguments)
         self.search_field = TextField(self.web_driver, UserWorkspaceLocators.SEARCH_FIELD_LOCATOR.arguments)
         self.search_button_mobile = Button(self.web_driver, UserWorkspaceLocators.SEARCH_BUTTON_MOBILE_LOCATOR.arguments)
+        self.found_items_mobile = QueryItems(self.web_driver, UserWorkspaceLocators.FOUND_ITEMS_MOBILE_LOCATOR.arguments)
+        self.found_items = QueryItems(self.web_driver, UserWorkspaceLocators.FOUND_ITEMS_LOCATOR.arguments)
 
     @property
     def search_results(self):
         if "deviceName" in self.web_driver.desired_capabilities.keys():
             self.search_button_mobile.click()
-        return self.web_driver.find_elements_by_css_selector(".search-result")\
+        return self.found_items_mobile\
             if "deviceName" in self.web_driver.desired_capabilities.keys()\
-            else self.web_driver.find_elements_by_name('q')
+            else self.found_items
 
     @allure.step("Searching for the next pattern: {1}")
     def search(self, request):
